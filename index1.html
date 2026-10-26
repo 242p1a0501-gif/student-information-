@@ -4,172 +4,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kids ABC Fruits and Vegetables</title>
+    <title>Student Information System</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #fff8dc;
+            background: #f0f4f8;
             text-align: center;
-            margin: 0;
+            margin: 20px;
         }
 
         h1 {
-            background: #ff9800;
-            color: white;
-            padding: 20px;
-            margin: 0;
+            color: #163a70;
         }
 
-        p {
-            font-size: 20px;
-        }
-
-        #cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+        .container {
+            background: white;
             padding: 20px;
             max-width: 1100px;
             margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+            overflow-x: auto;
         }
 
-        .card {
-            background: white;
-            border: 3px solid #ffd54f;
-            border-radius: 20px;
-            padding: 15px;
-            cursor: pointer;
-            box-shadow: 0 3px 8px #ddd;
-        }
-
-        .card:hover {
-            background: #e8f5e9;
-            transform: scale(1.04);
-        }
-
-        .letter {
-            font-size: 50px;
-            color: #e91e63;
-            font-weight: bold;
-        }
-
-        .picture {
-            font-size: 65px;
-            margin: 10px;
-        }
-
-        .word {
-            font-size: 23px;
-            font-weight: bold;
-            color: #2e7d32;
+        input {
+            padding: 10px;
+            margin: 6px;
+            width: 180px;
+            max-width: 85%;
+            box-sizing: border-box;
         }
 
         button {
-            background: #4caf50;
-            color: white;
+            padding: 10px 18px;
+            margin: 8px;
             border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 18px;
+            border-radius: 5px;
+            background: #1769aa;
+            color: white;
             cursor: pointer;
-            margin: 10px;
+        }
+
+        button:hover {
+            background: #0d4778;
+        }
+
+        .delete {
+            background: #dc3545;
+        }
+
+        .delete:hover {
+            background: #a71d2a;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        th {
+            background: #1769aa;
+            color: white;
+        }
+
+        #message {
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: #d22;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>🌈 ABC Fruits and Vegetables 🍎</h1>
-    <p>Learn ABC with yummy fruits and healthy vegetables!</p>
-    <p>Click any card to learn.</p>
+<div class="container">
+    <h1>Student Information System</h1>
+    <h3>Student Details and Marks</h3>
 
-    <button onclick="showAll()">Show All ABC</button>
-    <button onclick="showFruits()">🍎 Fruits</button>
-    <button onclick="showVegetables()">🥕 Vegetables</button>
+    <form id="studentForm">
+        <input id="roll" type="number"
+               placeholder="Student Roll Number"
+               min="1" step="1" required>
 
-    <div id="cards"></div>
+        <input id="name" type="text"
+               placeholder="Student Name" required>
 
-    <script>
-        const items = [
-            ["A", "Apple", "🍎", "Fruit"],
-            ["B", "Banana", "🍌", "Fruit"],
-            ["C", "Carrot", "🥕", "Vegetable"],
-            ["D", "Dragon Fruit", "🐉", "Fruit"],
-            ["E", "Eggplant", "🍆", "Vegetable"],
-            ["F", "Fig", "🟣", "Fruit"],
-            ["G", "Grapes", "🍇", "Fruit"],
-            ["H", "Honeydew", "🍈", "Fruit"],
-            ["I", "Iceberg Lettuce", "🥬", "Vegetable"],
-            ["J", "Jackfruit", "🍈", "Fruit"],
-            ["K", "Kiwi", "🥝", "Fruit"],
-            ["L", "Lemon", "🍋", "Fruit"],
-            ["M", "Mango", "🥭", "Fruit"],
-            ["N", "Nectarine", "🍑", "Fruit"],
-            ["O", "Onion", "🧅", "Vegetable"],
-            ["P", "Potato", "🥔", "Vegetable"],
-            ["Q", "Quince", "🍐", "Fruit"],
-            ["R", "Radish", "🫜", "Vegetable"],
-            ["S", "Strawberry", "🍓", "Fruit"],
-            ["T", "Tomato", "🍅", "Vegetable"],
-            ["U", "Ugli Fruit", "🍊", "Fruit"],
-            ["V", "Vanilla Bean", "🌿", "Plant"],
-            ["W", "Watermelon", "🍉", "Fruit"],
-            ["X", "Xigua (Watermelon)", "🍉", "Fruit"],
-            ["Y", "Yam", "🍠", "Vegetable"],
-            ["Z", "Zucchini", "🥒", "Vegetable"]
-        ];
+        <input id="className" type="text"
+               placeholder="Class" required>
 
-        const cards = document.getElementById("cards");
+        <input id="section" type="text"
+               placeholder="Section" required>
 
-        function display(list) {
-            cards.innerHTML = "";
+        <br>
 
-            list.forEach(item => {
-                const card = document.createElement("div");
-                card.className = "card";
+        <input id="telugu" type="number"
+               placeholder="Telugu Marks (0-100)"
+               min="0" max="100" step="1" required>
 
-                const letter = document.createElement("div");
-                letter.className = "letter";
-                letter.textContent = item[0];
+        <input id="english" type="number"
+               placeholder="English Marks (0-100)"
+               min="0" max="100" step="1" required>
 
-                const picture = document.createElement("div");
-                picture.className = "picture";
-                picture.textContent = item[2];
+        <input id="maths" type="number"
+               placeholder="Maths Marks (0-100)"
+               min="0" max="100" step="1" required>
 
-                const word = document.createElement("div");
-                word.className = "word";
-                word.textContent = item[0] + " for " + item[1];
+        <br>
 
-                card.append(letter, picture, word);
+        <button type="submit">Add Student</button>
+        <button type="reset">Clear Form</button>
+    </form>
 
-                card.addEventListener("click", () => {
-                    const message = new SpeechSynthesisUtterance(
-                        item[0] + " for " + item[1]
-                    );
-                    message.rate = 0.75;
-                    speechSynthesis.cancel();
-                    speechSynthesis.speak(message);
-                });
+    <p id="message" role="status" aria-live="polite"></p>
 
-                cards.appendChild(card);
+    <h3>All Student Information</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Roll No.</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Section</th>
+                <th>Telugu</th>
+                <th>English</th>
+                <th>Maths</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Grade</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="studentTable"></tbody>
+    </table>
+</div>
+
+<script>
+    const form = document.getElementById("studentForm");
+    const table = document.getElementById("studentTable");
+    const message = document.getElementById("message");
+
+    // Load saved students from browser storage.
+    let students = [];
+
+    try {
+        students = JSON.parse(
+            localStorage.getItem("students")
+        ) || [];
+    } catch (error) {
+        students = [];
+    }
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = type;
+    }
+
+    function saveStudents() {
+        try {
+            localStorage.setItem(
+                "students",
+                JSON.stringify(students)
+            );
+        } catch (error) {
+            showMessage(
+                "Could not save data in browser storage.",
+                "error"
+            );
+        }
+    }
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const roll = Number(
+            document.getElementById("roll").value
+        );
+
+        const name = document.getElementById("name").value.trim();
+        const className = document.getElementById("className").value.trim();
+        const section = document.getElementById("section").value.trim();
+
+        const telugu = Number(document.getElementById("telugu").value);
+        const english = Number(document.getElementById("english").value);
+        const maths = Number(document.getElementById("maths").value);
+
+        // Validate roll number.
+        if (!Number.isInteger(roll) || roll <= 0) {
+            showMessage(
+                "Roll number must be a positive integer.",
+                "error"
+            );
+            return;
+        }
+
+        // Validate text fields.
+        if (!name || !className || !section) {
+            showMessage(
+                "Please enter all student details.",
+                "error"
+            );
+            return;
+        }
+
+        // Check for duplicate roll numbers.
+        if (students.some(s => Number(s.roll) === roll)) {
+            showMessage(
+                "Roll number already exists!",
+                "error"
+            );
+            return;
+        }
+
+        // Validate marks.
+        const marks = [telugu, english, maths];
+
+        if (marks.some(mark =>
+            !Number.isFinite(mark) ||
+            mark < 0 ||
+            mark > 100 ||
+            !Number.isInteger(mark)
+        )) {
+            showMessage(
+                "All marks must be whole numbers between 0 and 100.",
+                "error"
+            );
+            return;
+        }
+
+        // Calculate total and percentage.
+        const total = telugu + english + maths;
+        const percentage = (total / 300 * 100).toFixed(2);
+
+        // Calculate grade.
+        let grade;
+
+        if (marks.some(mark => mark < 35)) {
+            grade = "Fail";
+        } else if (percentage >= 90) {
+            grade = "A+";
+        } else if (percentage >= 80) {
+            grade = "A";
+        } else if (percentage >= 70) {
+            grade = "B";
+        } else if (percentage >= 60) {
+            grade = "C";
+        } else {
+            grade = "D";
+        }
+
+        const student = {
+            roll,
+            name,
+            className,
+            section,
+            telugu,
+            english,
+            maths,
+            total,
+            percentage,
+            grade
+        };
+
+        students.push(student);
+        saveStudents();
+        displayStudents();
+
+        showMessage(
+            "Student added successfully!",
+            "success"
+        );
+
+        form.reset();
+    });
+
+    function displayStudents() {
+        table.innerHTML = "";
+
+        students.forEach((s, index) => {
+            const row = document.createElement("tr");
+
+            const values = [
+                s.roll,
+                s.name,
+                s.className,
+                s.section,
+                s.telugu,
+                s.english,
+                s.maths,
+                s.total,
+                s.percentage + "%",
+                s.grade
+            ];
+
+            values.forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+                row.appendChild(cell);
             });
-        }
 
-        function showAll() {
-            display(items);
-        }
+            const actionCell = document.createElement("td");
+            const deleteButton = document.createElement("button");
 
-        function showFruits() {
-            display(items.filter(item => item[3] === "Fruit"));
-        }
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "delete";
+            deleteButton.type = "button";
 
-        function showVegetables() {
-            display(items.filter(item => item[3] === "Vegetable"));
-        }
+            deleteButton.addEventListener("click", function() {
+                students.splice(index, 1);
 
-        showAll();
-    </script>
+                saveStudents();
+                displayStudents();
+
+                showMessage("Student deleted.", "success");
+            });
+
+            actionCell.appendChild(deleteButton);
+            row.appendChild(actionCell);
+            table.appendChild(row);
+        });
+    }
+
+    // Display previously saved records when the page opens.
+    displayStudents();
+
+    // Clear old status messages when the form is reset.
+    form.addEventListener("reset", function() {
+        message.textContent = "";
+        message.className = "";
+    });
+</script>
 
 </body>
 </html>
+
