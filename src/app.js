@@ -1,235 +1,175 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Student Information System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids ABC Fruits and Vegetables</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f0f4f8;
+            background: #fff8dc;
             text-align: center;
-            margin: 20px;
+            margin: 0;
         }
 
         h1 {
-            color: #163a70;
-        }
-
-        .container {
-            background: white;
+            background: #ff9800;
+            color: white;
             padding: 20px;
-            max-width: 900px;
-            margin: auto;
-            border-radius: 10px;
-            box-shadow: 0 0 10px #ccc;
+            margin: 0;
         }
 
-        input {
-            padding: 10px;
-            margin: 6px;
-            width: 180px;
+        p {
+            font-size: 20px;
+        }
+
+        #cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            border: 3px solid #ffd54f;
+            border-radius: 20px;
+            padding: 15px;
+            cursor: pointer;
+            box-shadow: 0 3px 8px #ddd;
+        }
+
+        .card:hover {
+            background: #e8f5e9;
+            transform: scale(1.04);
+        }
+
+        .letter {
+            font-size: 50px;
+            color: #e91e63;
+            font-weight: bold;
+        }
+
+        .picture {
+            font-size: 65px;
+            margin: 10px;
+        }
+
+        .word {
+            font-size: 23px;
+            font-weight: bold;
+            color: #2e7d32;
         }
 
         button {
-            padding: 10px 18px;
-            margin: 8px;
+            background: #4caf50;
+            color: white;
             border: none;
-            border-radius: 5px;
-            background: #1769aa;
-            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 18px;
             cursor: pointer;
-        }
-
-        button:hover {
-            background: #0d4778;
-        }
-
-        .delete {
-            background: #dc3545;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-            background: white;
-        }
-
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-
-        th {
-            background: #1769aa;
-            color: white;
-        }
-
-        #message {
-            color: #d22;
+            margin: 10px;
         }
     </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>Student Information System</h1>
-    <h3>Student Details and Marks</h3>
+    <h1>🌈 ABC Fruits and Vegetables 🍎</h1>
+    <p>Learn ABC with yummy fruits and healthy vegetables!</p>
+    <p>Click any card to learn.</p>
 
-    <form id="studentForm">
-        <input id="roll" type="number"
-               placeholder="Student Roll Number" required>
+    <button onclick="showAll()">Show All ABC</button>
+    <button onclick="showFruits()">🍎 Fruits</button>
+    <button onclick="showVegetables()">🥕 Vegetables</button>
 
-        <input id="name" type="text"
-               placeholder="Student Name" required>
+    <div id="cards"></div>
 
-        <input id="className" type="text"
-               placeholder="Class" required>
+    <script>
+        const items = [
+            ["A", "Apple", "🍎", "Fruit"],
+            ["B", "Banana", "🍌", "Fruit"],
+            ["C", "Carrot", "🥕", "Vegetable"],
+            ["D", "Dragon Fruit", "🐉", "Fruit"],
+            ["E", "Eggplant", "🍆", "Vegetable"],
+            ["F", "Fig", "🟣", "Fruit"],
+            ["G", "Grapes", "🍇", "Fruit"],
+            ["H", "Honeydew", "🍈", "Fruit"],
+            ["I", "Iceberg Lettuce", "🥬", "Vegetable"],
+            ["J", "Jackfruit", "🍈", "Fruit"],
+            ["K", "Kiwi", "🥝", "Fruit"],
+            ["L", "Lemon", "🍋", "Fruit"],
+            ["M", "Mango", "🥭", "Fruit"],
+            ["N", "Nectarine", "🍑", "Fruit"],
+            ["O", "Onion", "🧅", "Vegetable"],
+            ["P", "Potato", "🥔", "Vegetable"],
+            ["Q", "Quince", "🍐", "Fruit"],
+            ["R", "Radish", "🫜", "Vegetable"],
+            ["S", "Strawberry", "🍓", "Fruit"],
+            ["T", "Tomato", "🍅", "Vegetable"],
+            ["U", "Ugli Fruit", "🍊", "Fruit"],
+            ["V", "Vanilla Bean", "🌿", "Plant"],
+            ["W", "Watermelon", "🍉", "Fruit"],
+            ["X", "Xigua (Watermelon)", "🍉", "Fruit"],
+            ["Y", "Yam", "🍠", "Vegetable"],
+            ["Z", "Zucchini", "🥒", "Vegetable"]
+        ];
 
-        <input id="section" type="text"
-               placeholder="Section" required>
+        const cards = document.getElementById("cards");
 
-        <br>
+        function display(list) {
+            cards.innerHTML = "";
 
-        <input id="telugu" type="number"
-               placeholder="Telugu Marks (0-100)"
-               min="0" max="100" required>
+            list.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "card";
 
-        <input id="english" type="number"
-               placeholder="English Marks (0-100)"
-               min="0" max="100" required>
+                const letter = document.createElement("div");
+                letter.className = "letter";
+                letter.textContent = item[0];
 
-        <input id="maths" type="number"
-               placeholder="Maths Marks (0-100)"
-               min="0" max="100" required>
+                const picture = document.createElement("div");
+                picture.className = "picture";
+                picture.textContent = item[2];
 
-        <br>
+                const word = document.createElement("div");
+                word.className = "word";
+                word.textContent = item[0] + " for " + item[1];
 
-        <button type="submit">Add Student</button>
-    </form>
+                card.append(letter, picture, word);
 
-    <p id="message"></p>
+                card.addEventListener("click", () => {
+                    const message = new SpeechSynthesisUtterance(
+                        item[0] + " for " + item[1]
+                    );
+                    message.rate = 0.75;
+                    speechSynthesis.cancel();
+                    speechSynthesis.speak(message);
+                });
 
-    <h3>All Student Information</h3>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Roll No.</th>
-                <th>Name</th>
-                <th>Class</th>
-                <th>Section</th>
-                <th>Telugu</th>
-                <th>English</th>
-                <th>Maths</th>
-                <th>Total</th>
-                <th>Percentage</th>
-                <th>Grade</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody id="studentTable"></tbody>
-    </table>
-</div>
-
-<script>
-    const form = document.getElementById("studentForm");
-    const table = document.getElementById("studentTable");
-    const message = document.getElementById("message");
-
-    let students = [];
-
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        const roll = document.getElementById("roll").value;
-        const name = document.getElementById("name").value.trim();
-        const className = document.getElementById("className").value.trim();
-        const section = document.getElementById("section").value.trim();
-
-        const telugu = Number(document.getElementById("telugu").value);
-        const english = Number(document.getElementById("english").value);
-        const maths = Number(document.getElementById("maths").value);
-
-        if (students.some(s => s.roll === roll)) {
-            message.textContent = "Roll number already exists!";
-            return;
-        }
-
-        if ([telugu, english, maths].some(
-            mark => mark < 0 || mark > 100
-        )) {
-            message.textContent = "Marks must be between 0 and 100.";
-            return;
-        }
-
-        const total = telugu + english + maths;
-        const percentage = (total / 300 * 100).toFixed(2);
-
-        let grade;
-        if ([telugu, english, maths].some(mark => mark < 35)) {
-            grade = "Fail";
-        } else if (percentage >= 90) {
-            grade = "A+";
-        } else if (percentage >= 80) {
-            grade = "A";
-        } else if (percentage >= 70) {
-            grade = "B";
-        } else if (percentage >= 60) {
-            grade = "C";
-        } else if (percentage >= 35) {
-            grade = "D";
-        } else {
-            grade = "Fail";
-        }
-
-        students.push({
-            roll, name, className, section,
-            telugu, english, maths,
-            total, percentage, grade
-        });
-
-        message.textContent = "Student added successfully!";
-        form.reset();
-        displayStudents();
-    });
-
-    function displayStudents() {
-        table.innerHTML = "";
-
-        students.forEach((s, index) => {
-            const row = document.createElement("tr");
-
-            [
-                s.roll, s.name, s.className, s.section,
-                s.telugu, s.english, s.maths,
-                s.total, s.percentage + "%", s.grade
-            ].forEach(value => {
-                const cell = document.createElement("td");
-                cell.textContent = value;
-                row.appendChild(cell);
+                cards.appendChild(card);
             });
+        }
 
-            const actionCell = document.createElement("td");
-            const deleteButton = document.createElement("button");
+        function showAll() {
+            display(items);
+        }
 
-            deleteButton.textContent = "Delete";
-            deleteButton.className = "delete";
+        function showFruits() {
+            display(items.filter(item => item[3] === "Fruit"));
+        }
 
-            deleteButton.addEventListener("click", function() {
-                students.splice(index, 1);
-                displayStudents();
-                message.textContent = "Student deleted.";
-            });
+        function showVegetables() {
+            display(items.filter(item => item[3] === "Vegetable"));
+        }
 
-            actionCell.appendChild(deleteButton);
-            row.appendChild(actionCell);
-            table.appendChild(row);
-        });
-    }
-</script>
+        showAll();
+    </script>
 
 </body>
 </html>

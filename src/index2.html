@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #163a70;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            max-width: 1100px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+            overflow-x: auto;
+        }
+
+        input {
+            padding: 10px;
+            margin: 6px;
+            width: 180px;
+            max-width: 85%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 18px;
+            margin: 8px;
+            border: none;
+            border-radius: 5px;
+            background: #1769aa;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0d4778;
+        }
+
+        .delete {
+            background: #dc3545;
+        }
+
+        .delete:hover {
+            background: #a71d2a;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        th {
+            background: #1769aa;
+            color: white;
+        }
+
+        #message {
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: #d22;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Student Information System</h1>
+    <h3>Student Details and Marks</h3>
+
+    <form id="studentForm">
+        <input id="roll" type="number"
+               placeholder="Student Roll Number"
+               min="1" step="1" required>
+
+        <input id="name" type="text"
+               placeholder="Student Name" required>
+
+        <input id="className" type="text"
+               placeholder="Class" required>
+
+        <input id="section" type="text"
+               placeholder="Section" required>
+
+        <br>
+
+        <input id="telugu" type="number"
+               placeholder="Telugu Marks (0-100)"
+               min="0" max="100" step="1" required>
+
+        <input id="english" type="number"
+               placeholder="English Marks (0-100)"
+               min="0" max="100" step="1" required>
+
+        <input id="maths" type="number"
+               placeholder="Maths Marks (0-100)"
+               min="0" max="100" step="1" required>
+
+        <input id="hindi" type="number"
+               placeholder="Hindi Marks (0-100)"
+               min="0" max="100" step="1" required>
+       
+
+        <br>
+
+        <button type="submit">Add Student</button>
+        <button type="reset">Clear Form</button>
+    </form>
+
+    <p id="message" role="status" aria-live="polite"></p>
+
+    <h3>All Student Information</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Roll No.</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Section</th>
+                <th>Telugu</th>
+                <th>English</th>
+                <th>Maths</th>
+                <th>Hindi</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Grade</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="studentTable"></tbody>
+    </table>
+</div>
+
+<script>
+    const form = document.getElementById("studentForm");
+    const table = document.getElementById("studentTable");
+    const message = document.getElementById("message");
+
+    // Load saved students from browser storage.
+    let students = [];
+
+    try {
+        students = JSON.parse(
+            localStorage.getItem("students")
+        ) || [];
+    } catch (error) {
+        students = [];
+    }
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = type;
+    }
+
+    function saveStudents() {
+        try {
+            localStorage.setItem(
+                "students",
+                JSON.stringify(students)
+            );
+        } catch (error) {
+            showMessage(
+                "Could not save data in browser storage.",
+                "error"
+            );
+        }
+    }
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const roll = Number(
+            document.getElementById("roll").value
+        );
+
+        const name = document.getElementById("name").value.trim();
+        const className = document.getElementById("className").value.trim();
+        const section = document.getElementById("section").value.trim();
+
+        const telugu = Number(document.getElementById("telugu").value);
+        const english = Number(document.getElementById("english").value);
+        const maths = Number(document.getElementById("maths").value);
+
+        // Validate roll number.
+        if (!Number.isInteger(roll) || roll <= 0) {
+            showMessage(
+                "Roll number must be a positive integer.",
+                "error"
+            );
+            return;
+        }
+
+        // Validate text fields.
+        if (!name || !className || !section) {
+            showMessage(
+                "Please enter all student details.",
+                "error"
+            );
+            return;
+        }
+
+        // Check for duplicate roll numbers.
+        if (students.some(s => Number(s.roll) === roll)) {
+            showMessage(
+                "Roll number already exists!",
+                "error"
+            );
+            return;
+        }
+
+        // Validate marks.
+        const marks = [telugu, english, maths,hindi];
+
+        if (marks.some(mark =>
+            !Number.isFinite(mark) ||
+            mark < 0 ||
+            mark > 100 ||
+            !Number.isInteger(mark)
+        )) {
+            showMessage(
+                "All marks must be whole numbers between 0 and 100.",
+                "error"
+            );
+            return;
+        }
+
+        // Calculate total and percentage.
+        const total = telugu + english + maths +hindi;
+        const percentage = (total / 400 * 100).toFixed(2);
+
+        // Calculate grade.
+        let grade;
+
+        if (marks.some(mark => mark < 35)) {
+            grade = "Fail";
+        } else if (percentage >= 90) {
+            grade = "A+";
+        } else if (percentage >= 80) {
+            grade = "A";
+        } else if (percentage >= 70) {
+            grade = "B";
+        } else if (percentage >= 60) {
+            grade = "C";
+        } else {
+            grade = "D";
+        }
+
+        const student = {
+            roll,
+            name,
+            className,
+            section,
+            telugu,
+            english,
+            maths,
+            hindi,
+            total,
+            percentage,
+            grade
+        };
+
+        students.push(student);
+        saveStudents();
+        displayStudents();
+
+        showMessage(
+            "Student added successfully!",
+            "success"
+        );
+
+        form.reset();
+    });
+
+    function displayStudents() {
+        table.innerHTML = "";
+
+        students.forEach((s, index) => {
+            const row = document.createElement("tr");
+
+            const values = [
+                s.roll,
+                s.name,
+                s.className,
+                s.section,
+                s.telugu,
+                s.english,
+                s.maths,
+                s.total,
+                s.percentage + "%",
+                s.grade
+            ];
+
+            values.forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+
+            const actionCell = document.createElement("td");
+            const deleteButton = document.createElement("button");
+
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "delete";
+            deleteButton.type = "button";
+
+            deleteButton.addEventListener("click", function() {
+                students.splice(index, 1);
+
+                saveStudents();
+                displayStudents();
+
+                showMessage("Student deleted.", "success");
+            });
+
+            actionCell.appendChild(deleteButton);
+            row.appendChild(actionCell);
+            table.appendChild(row);
+        });
+    }
+
+    // Display previously saved records when the page opens.
+    displayStudents();
+
+    // Clear old status messages when the form is reset.
+    form.addEventListener("reset", function() {
+        message.textContent = "";
+        message.className = "";
+    });
+</script>
+
+</body>
+</html>
+
